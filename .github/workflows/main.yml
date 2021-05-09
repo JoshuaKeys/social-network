@@ -31,5 +31,8 @@ jobs:
             mkdir app
             cd app
             git clone git@github.com:JoshuaKeys/social-network.git
+            cd social-network/angular-social-network
+            npm install
+            ng build --prod
             echo 'Deployment successful to digital ocean'
             
