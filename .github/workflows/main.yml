@@ -39,7 +39,7 @@ jobs:
             git pull
             cd angular-social-network
             npm install
-            npm run lint
+            npm run test
       - name: If Git hub was not already cloned, clone and test
         if: ${{failure()}}
         uses: fifsky/ssh-action@master
