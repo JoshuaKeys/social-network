@@ -27,7 +27,21 @@ jobs:
             rm -r app
             mkdir -p app
             cd app
+      - name: test if directory is created
+        uses: fifsky/ssh-action@master
+        with:
+          host: ${{secrets.SSH_HOST}}
+          port: ${{secrets.SSH_PORT}}
+          user: ${{secrets.SSH_USERNAME}}
+          key: ${{secrets.SSH_KEY}}
+          command: |
+            cd social-network
+            git pull
+            cd angular-social-network
+            npm install
+            npm run lint
       - name: If Git hub was not already cloned, clone and test
+        if: ${{failure()}}
         uses: fifsky/ssh-action@master
         with:
           host: ${{secrets.SSH_HOST}}
@@ -37,19 +51,6 @@ jobs:
           command: |
             git clone git@github.com:JoshuaKeys/social-network.git
             cd social-network/angular-social-network
-            npm install
-            npm run test
-      - name: If github was already cloned, pull and test
-        uses: fifsky/ssh-action@master
-        with:
-          host: ${{secrets.SSH_HOST}}
-          port: ${{secrets.SSH_PORT}}
-          user: ${{secrets.SSH_USERNAME}}
-          key: ${{secrets.SSH_KEY}}
-          command: |
-            cd social-network/
-            git pull
-            cd angular-social-network
             npm install
             npm run test
 
