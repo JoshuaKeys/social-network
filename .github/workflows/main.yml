@@ -16,17 +16,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Remove old Files
-        uses: fifsky/ssh-action@master
-        with:
-          host: ${{secrets.SSH_HOST}}
-          port: ${{secrets.SSH_PORT}}
-          user: ${{secrets.SSH_USERNAME}}
-          key: ${{secrets.SSH_KEY}}
-          command: |
-            rm -r app
-            mkdir -p app
-            cd app
       - name: test if directory is created
         uses: fifsky/ssh-action@master
         with:
