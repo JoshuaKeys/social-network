@@ -28,19 +28,30 @@ jobs:
             mkdir -p app
             cd app
       - name: Check Github
-        run: |
-          git clone git@github.com:JoshuaKeys/social-network.git
-          cd social-network/angular-social-network
-          npm install
-          npm run test
+        uses: fifsky/ssh-action@master
+        with:
+          host: ${{secrets.SSH_HOST}}
+          port: ${{secrets.SSH_PORT}}
+          user: ${{secrets.SSH_USERNAME}}
+          key: ${{secrets.SSH_KEY}}
+          command: |
+            git clone git@github.com:JoshuaKeys/social-network.git
+            cd social-network/angular-social-network
+            npm install
+            npm run test
       - name: Check Github
-        if: ${{failure()}}
-        run: |
-          cd social-network/
-          git pull
-          cd angular-social-network
-          npm install
-          npm run test
+        with:
+          host: ${{secrets.SSH_HOST}}
+          port: ${{secrets.SSH_PORT}}
+          user: ${{secrets.SSH_USERNAME}}
+          key: ${{secrets.SSH_KEY}}
+          command: |
+            cd social-network/
+            git pull
+            cd angular-social-network
+            npm install
+            npm run test
+
   # deploy:
   #   # The type of runner that the job will run on
   #   runs-on: ubuntu-latest
