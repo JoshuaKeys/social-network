@@ -2,18 +2,41 @@
 
 name: Build & Deploy
 
-# Controls when the action will run. 
+# Controls when the action will run.
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [ master ]
-    
+    branches: [master]
+
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test Frontend
+        uses: fifsky/ssh-action@master
+        with:
+          host: ${{secrets.SSH_HOST}}
+          port: ${{secrets.SSH_PORT}}
+          user: ${{secrets.SSH_USERNAME}}
+          key: ${{secrets.SSH_KEY}}
+          command: |
+            rm -r app
+            mkdir -p app
+            cd app
+            git clone git@github.com:JoshuaKeys/social-network.git
+            cd social-network/angular-social-network
+            npm install
+            npm run test
+            echo 'Frontend tests passes'
+            cd ../backend
+            npm install
+            npm run test
+            echo 'Backend tests passes'
+
   deploy:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
@@ -35,5 +58,7 @@ jobs:
             cd social-network/angular-social-network
             npm install
             npm run build
+            cd ../backend
+            npm install
+            npm start
             echo 'Deployment successful to digital ocean'
-            
