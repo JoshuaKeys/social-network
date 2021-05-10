@@ -35,6 +35,7 @@ jobs:
           command: |
             mkdir -p app
             cd app
+            ls
 
   # deploy:
   #   # The type of runner that the job will run on
