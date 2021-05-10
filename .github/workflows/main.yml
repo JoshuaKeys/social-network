@@ -39,6 +39,14 @@ jobs:
             git pull
             cd angular-social-network
             npm install
+            npm run test
+            echo 'Frontend tests passes'
+            npm run build
+            cd ../backend
+            npm install
+            npm run test
+            echo 'Backend tests passes'
+            pm2 restart server.js
       - name: If Git hub was not already cloned, clone and test
         if: ${{failure()}}
         uses: fifsky/ssh-action@master
