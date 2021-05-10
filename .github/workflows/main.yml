@@ -16,7 +16,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Test Frontend
+      - name: Remove old Files
         uses: fifsky/ssh-action@master
         with:
           host: ${{secrets.SSH_HOST}}
@@ -25,25 +25,7 @@ jobs:
           key: ${{secrets.SSH_KEY}}
           command: |
             rm -r app
-            mkdir -p app
-            cd app
-            git clone git@github.com:JoshuaKeys/social-network.git
-            cd social-network/angular-social-network
-            npm install
-            npm run test
-            echo 'Frontend tests passes'
-            cd ../backend
-            npm install
-            npm run test
-            echo 'Backend tests passes'
-
-  deploy:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      - name: Deploy NodeJS App
+      - name: Check Github
         uses: fifsky/ssh-action@master
         with:
           host: ${{secrets.SSH_HOST}}
@@ -51,14 +33,40 @@ jobs:
           user: ${{secrets.SSH_USERNAME}}
           key: ${{secrets.SSH_KEY}}
           command: |
-            rm -r app
             mkdir -p app
             cd app
-            git clone git@github.com:JoshuaKeys/social-network.git
-            cd social-network/angular-social-network
-            npm install
-            npm run build
-            cd ../backend
-            npm install
-            npm start
-            echo 'Deployment successful to digital ocean'
+
+  # deploy:
+  #   # The type of runner that the job will run on
+  #   runs-on: ubuntu-latest
+
+  #   # Steps represent a sequence of tasks that will be executed as part of the job
+  #   steps:
+  #     - name: Deploy NodeJS App
+  #       uses: fifsky/ssh-action@master
+  #       with:
+  #         host: ${{secrets.SSH_HOST}}
+  #         port: ${{secrets.SSH_PORT}}
+  #         user: ${{secrets.SSH_USERNAME}}
+  #         key: ${{secrets.SSH_KEY}}
+  #         command: |
+  #           rm -r app
+  #           mkdir -p app
+  #           cd app
+  #           git clone git@github.com:JoshuaKeys/social-network.git
+  #           cd social-network/angular-social-network
+  #           npm install
+  #           npm run build
+  #           cd ../backend
+  #           npm install
+  #           npm start
+  #           echo 'Deployment successful to digital ocean'
+  # git clone git@github.com:JoshuaKeys/social-network.git
+  # cd social-network/angular-social-network
+  # npm install
+  # npm run test
+  # echo 'Frontend tests passes'
+  # cd ../backend
+  # npm install
+  # npm run test
+  # echo 'Backend tests passes'
