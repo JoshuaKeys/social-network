@@ -35,11 +35,10 @@ jobs:
           user: ${{secrets.SSH_USERNAME}}
           key: ${{secrets.SSH_KEY}}
           command: |
-            cd social-network
+            cd app/social-network
             git pull
             cd angular-social-network
             npm install
-            npm run test
       - name: If Git hub was not already cloned, clone and test
         if: ${{failure()}}
         uses: fifsky/ssh-action@master
@@ -49,10 +48,16 @@ jobs:
           user: ${{secrets.SSH_USERNAME}}
           key: ${{secrets.SSH_KEY}}
           command: |
-            git clone git@github.com:JoshuaKeys/social-network.git
-            cd social-network/angular-social-network
+            cd app/social-network/angular-social-network
             npm install
             npm run test
+            echo 'Frontend tests passes'
+            npm run build
+            cd ../backend
+            npm install
+            npm run test
+            echo 'Backend tests passes'
+            pm2 restart server.js
 
   # deploy:
   #   # The type of runner that the job will run on
