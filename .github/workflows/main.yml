@@ -35,26 +35,7 @@ jobs:
             npm install
             npm run test
             echo 'Backend tests passes'
-            pm2 restart server.js
-      - name: If Git hub was not already cloned, clone and test
-        if: ${{failure()}}
-        uses: fifsky/ssh-action@master
-        with:
-          host: ${{secrets.SSH_HOST}}
-          port: ${{secrets.SSH_PORT}}
-          user: ${{secrets.SSH_USERNAME}}
-          key: ${{secrets.SSH_KEY}}
-          command: |
-            cd app/social-network/angular-social-network
-            npm install
-            npm run test
-            echo 'Frontend tests passes'
-            npm run build
-            cd ../backend
-            npm install
-            npm run test
-            echo 'Backend tests passes'
-            pm2 restart server.js
+            npm start
 
   # deploy:
   #   # The type of runner that the job will run on
