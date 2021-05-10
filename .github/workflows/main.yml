@@ -27,7 +27,7 @@ jobs:
             rm -r app
             mkdir -p app
             cd app
-      - name: Check Github
+      - name: If Git hub was not already cloned, clone and test
         uses: fifsky/ssh-action@master
         with:
           host: ${{secrets.SSH_HOST}}
@@ -39,7 +39,8 @@ jobs:
             cd social-network/angular-social-network
             npm install
             npm run test
-      - name: Check Github
+      - name: If github was already cloned, pull and test
+        uses: fifsky/ssh-action@master
         with:
           host: ${{secrets.SSH_HOST}}
           port: ${{secrets.SSH_PORT}}
