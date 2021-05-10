@@ -25,6 +25,8 @@ jobs:
           key: ${{secrets.SSH_KEY}}
           command: |
             rm -r app
+            mkdir -p app
+            cd app
       - name: Check Github
         uses: fifsky/ssh-action@master
         with:
@@ -33,10 +35,20 @@ jobs:
           user: ${{secrets.SSH_USERNAME}}
           key: ${{secrets.SSH_KEY}}
           command: |
-            mkdir -p app
-            cd app
-            ls
-
+            git clone git@github.com:JoshuaKeys/social-network.git
+            cd social-network/angular-social-network
+            npm install
+            npm run test
+      # - name: Check Github
+      #   uses: fifsky/ssh-action@master
+      #   with:
+      #     host: ${{secrets.SSH_HOST}}
+      #     port: ${{secrets.SSH_PORT}}
+      #     user: ${{secrets.SSH_USERNAME}}
+      #     key: ${{secrets.SSH_KEY}}
+      #     command: |
+      #       mkdir -p app
+      #       cd app
   # deploy:
   #   # The type of runner that the job will run on
   #   runs-on: ubuntu-latest
@@ -62,10 +74,7 @@ jobs:
   #           npm install
   #           npm start
   #           echo 'Deployment successful to digital ocean'
-  # git clone git@github.com:JoshuaKeys/social-network.git
-  # cd social-network/angular-social-network
-  # npm install
-  # npm run test
+
   # echo 'Frontend tests passes'
   # cd ../backend
   # npm install
