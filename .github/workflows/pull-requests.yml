@@ -9,7 +9,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      -name: Remove Old files
       - name: Test Frontend
         uses: fifsky/ssh-action@master
         with:
