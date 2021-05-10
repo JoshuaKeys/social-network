@@ -1,0 +1,31 @@
+name: Pull Requests
+
+on:
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test Frontend
+        uses: fifsky/ssh-action@master
+        with:
+          host: ${{secrets.SSH_HOST}}
+          port: ${{secrets.SSH_PORT}}
+          user: ${{secrets.SSH_USERNAME}}
+          key: ${{secrets.SSH_KEY}}
+          command: |
+            rm -r app
+            mkdir -p app
+            cd app
+            git clone git@github.com:JoshuaKeys/social-network.git
+            cd social-network/angular-social-network
+            npm install
+            npm run test
+            echo 'Frontend tests passes'
+            cd ../backend
+            npm install
+            npm run test
+            echo 'Backend tests passes'
